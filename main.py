@@ -1,6 +1,9 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from yt_trend import get_yt_trend
 import time
 import argparse
@@ -39,17 +42,31 @@ class bing_auto_browser:
         # https://medium.com/@prateekrm/earn-500-daily-microsoft-rewards-points-automatically-with-a-simple-python-program-38fe648ff2a9
         #
         try:
-            self.open_url(url='https://login.live.com')
-
+            #self.open_url(url='https://login.live.com')
+            self.open_url(url='https://www.bing.com/')
+            signin_button = WebDriverWait(self.browser, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="id_l"]')))
+            time.sleep(2)
+            signin_button.click()
+           
+            time.sleep(3)
             username_ent = self.browser.find_element_by_name('loginfmt')
             username_ent.clear()
             username_ent.send_keys(username)
             username_ent.send_keys(Keys.RETURN)
+            
             time.sleep(3)
             password_ent = self.browser.find_element_by_name('passwd')
             password_ent.clear()
             password_ent.send_keys(password)
             password_ent.send_keys(Keys.ENTER)
+            
+            time.sleep(3)
+            try:
+                remember_account_butt = self.browser.find_element_by_xpath('//*[@id="idSIButton9"]')
+                remember_account_butt.click()
+            except:
+                pass
+            
 
         except Exception as e:
             print(e)
@@ -81,7 +98,7 @@ class bing_auto_ff_edge(bing_auto_browser):
     def __init__(self):
         super(bing_auto_browser, self)
 
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362"
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/82.0.4080.0 Safari/537.36 Edg/82.0.453.0"
 
         profile = webdriver.FirefoxProfile() 
         profile.set_preference("general.useragent.override", user_agent)
@@ -91,7 +108,7 @@ class bing_auto_ch_edge(bing_auto_browser):
     def __init__(self):
         super(bing_auto_browser, self)
 
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362"
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/82.0.4080.0 Safari/537.36 Edg/82.0.453.0"
         
         profile = webdriver.ChromeOptions()
         profile.add_argument('--user-agent="{0}"'.format(user_agent))
@@ -121,7 +138,7 @@ class bing_auto:
         for video_title in trending_video_titles:
             # self.driver.new_tab()
             self.driver.open_url(url='https://www.bing.com')
-            self.driver.search_term(str(video_title).encode('ascii', 'ignore'))
+            self.driver.search_term(str(video_title))
             time.sleep(0.5)
 
             
